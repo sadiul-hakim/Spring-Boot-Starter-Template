@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="error_body">
+<div class="error-container">
+    <img th:src="@{/image/404.svg}" class="icon" alt="error"/>
+    <h1>404</h1>
+    <p>Oops! The page you're looking for could not be found.</p>
+    <p>Error Code: <span th:text="${errorCode}">404</span></p>
+    <a href="/" th:href="@{/}">Go Back Home</a>
+</div>
+</body>
+</html>

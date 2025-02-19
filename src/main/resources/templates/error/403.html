@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - Forbidden</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="error_body">
+<div class="error-container">
+    <img th:src="@{/image/error.svg}" class="icon" alt="error"/>
+    <h1>403</h1>
+    <p>Oops! You don't have permission to access this page.</p>
+    <p>Error Code: <span th:text="${errorCode}">403</span></p>
+    <a href="/" th:href="@{/}">Go Back Home</a>
+</div>
+</body>
+</html>
