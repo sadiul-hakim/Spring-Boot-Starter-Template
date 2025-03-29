@@ -33,7 +33,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         try {
             if (request.getServletPath().equalsIgnoreCase("/login") ||
-                    request.getServletPath().endsWith("/validate-token")) {
+                    request.getServletPath().endsWith("/validate-token") ||
+                    request.getServletPath().endsWith("/refreshToken")) {
                 filterChain.doFilter(request, response);
             } else {
                 String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);

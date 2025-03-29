@@ -51,12 +51,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         extraClaims.put("roles", user.getAuthorities());
 
         String accessToken = JwtHelper.generateToken(user, extraClaims, (1000L * 60 * 60 * 24 * 7)); // expires in 7 days
+        String refreshToken = JwtHelper.generateToken(user, extraClaims ,(1000L * 60 * 60 * 24 * 30)); // expires in 30 days
 
         Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", accessToken);
-
-        response.addHeader("login", "yes");
-        response.addHeader("accessToken", accessToken);
+        tokenMap.put("accessToken", accessToken);
+        tokenMap.put("refreshToken", refreshToken);
 
         ResponseUtility.commitResponse(response, tokenMap, 200);
     }
