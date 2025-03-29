@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 public class SecurityConfig {
@@ -26,9 +26,13 @@ public class SecurityConfig {
     SecurityFilterChain config(HttpSecurity http) throws Exception {
 
         return http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/login", "/", "/refreshToken")
+                        .csrfTokenRepository(new CustomCsrfTokenRepository())
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                )
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/login",
-                        "/refreshToken").permitAll())
+                        "/refreshToken", "/csrf").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/admin/greeting")
                         .hasRole("ADMIN"))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/user/greeting")

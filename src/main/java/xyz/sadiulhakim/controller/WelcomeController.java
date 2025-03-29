@@ -3,6 +3,7 @@ package xyz.sadiulhakim.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Map;
 
@@ -30,6 +31,14 @@ public class WelcomeController {
 
         return ResponseEntity.ok(
                 Map.of("message", "Hi, This is norman user!")
+        );
+    }
+
+    @PostMapping("/test-csrf")
+    ResponseEntity<?> testCsrf() {
+
+        return ResponseEntity.ok(
+                Map.of("message", "Csrf is ok!")
         );
     }
 }
