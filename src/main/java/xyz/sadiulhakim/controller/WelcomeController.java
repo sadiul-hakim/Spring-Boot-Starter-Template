@@ -1,26 +1,35 @@
 package xyz.sadiulhakim.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Map;
 
 @Controller
 public class WelcomeController {
 
-    private int count = 0;
-
     @GetMapping("/")
-    String welcome(Model model) {
+    ResponseEntity<?> welcome() {
 
-        model.addAttribute("count", count);
-        return "index";
+        return ResponseEntity.ok(
+                Map.of("message", "Welcome, Back!")
+        );
     }
 
-    @PostMapping("/increment")
-    String increment(Model model) {
-        count++;
-        model.addAttribute("count", count);
-        return "index :: count-display";
+    @GetMapping("/admin/greeting")
+    ResponseEntity<?> adminGreeting() {
+
+        return ResponseEntity.ok(
+                Map.of("message", "Hi, This is admin!")
+        );
+    }
+
+    @GetMapping("/user/greeting")
+    ResponseEntity<?> userGreeting() {
+
+        return ResponseEntity.ok(
+                Map.of("message", "Hi, This is norman user!")
+        );
     }
 }
