@@ -7,22 +7,33 @@ import io.jsonwebtoken.io.IOException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.sadiulhakim.pojo.Token;
 import xyz.sadiulhakim.security.JwtHelper;
 import xyz.sadiulhakim.util.ResponseUtility;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class RefreshTokenController {
+public class TokenController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(TokenController.class);
     private final UserDetailsService userDetailsService;
 
-    public RefreshTokenController(UserDetailsService userDetailsService) {
+    public TokenController(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -51,7 +62,7 @@ public class RefreshTokenController {
 
                     // Send it to the user
                     Map<String, String> tokenMap = new HashMap<>();
-                    tokenMap.put("access-token", accessToken);
+                    tokenMap.put("accessToken", accessToken);
                     ResponseUtility.commitResponse(response, tokenMap, 200);
                 }
             } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
@@ -64,6 +75,30 @@ public class RefreshTokenController {
             }
         } else {
             throw new RuntimeException("Refresh token is missing.");
+        }
+    }
+
+    @PostMapping(value = "/validate-token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> validateToken(@RequestBody Token token) {
+
+        try {
+            if (token.token().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Collections.singletonMap("error", "Invalid token"));
+            }
+
+            String username = JwtHelper.extractUsername(token.token());
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            boolean validToken = JwtHelper.isValidToken(token.token(), userDetails);
+            return validToken ? ResponseEntity.ok(Collections.singletonMap("message", "The Token is valid!")) :
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("message", "Invalid token!"));
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Something went wrong!"));
         }
     }
 }
