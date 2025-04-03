@@ -27,7 +27,7 @@ public class SecurityConfig {
         String[] permittedEndpoints = {
                 "/", "/login",
                 "/refreshToken",
-                "/csrf", "/validate-token"
+                "/validate-token"
         };
 
         return http
