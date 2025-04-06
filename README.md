@@ -1,1 +1,1 @@
-# Download the jar file and create next solution.
+# Download the zip file and create next solution.
