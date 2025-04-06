@@ -1,4 +1,4 @@
-package xyz.sadiulhakim.exception;
+package com.example.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

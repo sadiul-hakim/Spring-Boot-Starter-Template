@@ -1,4 +1,4 @@
-package xyz.sadiulhakim.listener;
+package com.example.listener;
 
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.event.EventListener;
