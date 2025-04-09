@@ -8,6 +8,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -36,6 +40,17 @@ public class SecurityConfig {
                         .csrfTokenRepository(new CustomCsrfTokenRepository())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
                 )
+                .cors(cors -> {
+                    CorsConfigurationSource source = request -> {
+                        CorsConfiguration configuration = new CorsConfiguration();
+                        configuration.setAllowedOrigins(List.of("*"));
+                        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                        configuration.setAllowedHeaders(List.of("*"));
+                        return configuration;
+                    };
+
+                    cors.configurationSource(source);
+                })
                 .authorizeHttpRequests(auth -> auth.requestMatchers(permittedEndpoints)
                         .permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/admin/greeting")
