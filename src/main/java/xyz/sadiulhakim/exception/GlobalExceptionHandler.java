@@ -1,5 +1,6 @@
 package xyz.sadiulhakim.exception;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,10 @@ public class GlobalExceptionHandler {
                                 "error", e.getMessage()
                         )
                 );
+    }
+
+    @ExceptionHandler(RequestNotPermitted.class)
+    ResponseEntity<Map<String, String>> handleRequestNotPermitted(RequestNotPermitted e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "you have been blocked for making excessive calls!"));
     }
 }

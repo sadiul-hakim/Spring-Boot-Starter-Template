@@ -1,5 +1,6 @@
 package xyz.sadiulhakim.controller;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class WelcomeController {
         );
     }
 
+    @RateLimiter(name = "defaultRateLimiter")
     @GetMapping("/admin/greeting")
     ResponseEntity<?> adminGreeting() {
 
@@ -26,6 +28,7 @@ public class WelcomeController {
         );
     }
 
+    @RateLimiter(name = "defaultRateLimiter")
     @GetMapping("/user/greeting")
     ResponseEntity<?> userGreeting() {
 
