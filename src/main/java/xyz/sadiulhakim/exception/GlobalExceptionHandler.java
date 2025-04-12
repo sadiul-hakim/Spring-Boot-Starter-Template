@@ -1,6 +1,7 @@
 package xyz.sadiulhakim.exception;
 
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnsupportedOperationException.class)
     ResponseEntity<Map<String, String>> handleUnsupportedOperationException(UnsupportedOperationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    ResponseEntity<Map<String, String>> handleExpiredJwtException(ExpiredJwtException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Jwt token has been expired!"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
