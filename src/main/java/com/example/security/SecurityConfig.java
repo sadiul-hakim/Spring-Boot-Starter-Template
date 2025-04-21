@@ -27,11 +27,11 @@ public class SecurityConfig {
         };
 
         return http
-                .csrf(AbstractHttpConfigurer::disable) // TODO: Enable csrf
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers(permittedApis).permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .userDetailsService(userDetailsService())
-                .formLogin(Customizer.withDefaults())
+                .oauth2Login(login -> login.loginPage("/oauth2/authorization/google"))
                 .logout(Customizer.withDefaults())
                 .build();
     }

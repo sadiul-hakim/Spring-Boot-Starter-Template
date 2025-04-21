@@ -85,6 +85,7 @@
             border-radius: 6px;
             font-weight: bold;
             transition: all 0.3s ease-in-out;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -136,7 +137,11 @@
         <!--            hx-headers='{"X-CSRF-TOKEN": document.querySelector("meta[name=_csrf]").content}'-->
         <!--    To use _csrf put the token in meta and read from it    -->
         Increment
-    </button>
+    </button><br/> <br/>
+    <a th:href="@{/oauth2/authorization/google}" class="btn">
+        <i data-feather="at-sign"></i>
+        <span class="ml-2">Continue with Google</span>
+    </a>
 </div>
 </body>
 </html>
