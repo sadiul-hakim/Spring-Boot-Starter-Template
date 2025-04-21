@@ -31,7 +31,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers(permittedApis).permitAll())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .userDetailsService(userDetailsService())
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login_page")
+                        .defaultSuccessUrl("/", true)
+                        .loginProcessingUrl("/login")
+                        .failureUrl("/login?error=true").permitAll())
                 .logout(Customizer.withDefaults())
                 .build();
     }

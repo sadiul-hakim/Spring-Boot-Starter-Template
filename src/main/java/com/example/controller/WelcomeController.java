@@ -17,6 +17,13 @@ public class WelcomeController {
         return "index";
     }
 
+    @GetMapping("/login_page")
+    String loginPage(Model model) {
+
+        model.addAttribute("count", count);
+        return "login_page";
+    }
+
     @PostMapping("/increment")
     String increment(Model model) {
         count++;
