@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import xyz.sadiulhakim.refreshToken.RefreshTokenService;
 
 import java.util.List;
 
@@ -18,11 +19,13 @@ public class SecurityConfig {
 
     private final CustomAuthorizationFilter customAuthorizationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final RefreshTokenService refreshTokenService;
 
     public SecurityConfig(CustomAuthorizationFilter customAuthorizationFilter,
-                          AuthenticationProvider authenticationProvider) {
+                          AuthenticationProvider authenticationProvider, RefreshTokenService refreshTokenService) {
         this.customAuthorizationFilter = customAuthorizationFilter;
         this.authenticationProvider = authenticationProvider;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Bean
@@ -61,7 +64,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilter(new CustomAuthenticationFilter(authenticationProvider))
+                .addFilter(new CustomAuthenticationFilter(authenticationProvider, refreshTokenService))
                 .build();
     }
 }
